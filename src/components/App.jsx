@@ -1,7 +1,7 @@
 import React from 'react';
 import { nanoid } from 'nanoid';
 import Contacts from './Contacts/Contacts';
-import Filter from './Filter/Filter';
+// import Filter from './Filter/Filter';
 
 export default class App extends React.Component {
   state = {
