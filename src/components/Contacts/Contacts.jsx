@@ -1,5 +1,5 @@
-import propTypes from 'prop-types';
-import s from './Contacts.module.css';
+// import propTypes from 'prop-types';
+// import s from './Contacts.module.css';
 import { nanoid } from 'nanoid';
 
 export default function Contacts({ contacts }) {

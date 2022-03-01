@@ -1,5 +1,5 @@
 import React from 'react';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 import Contacts from './Contacts/Contacts';
 // import Filter from './Filter/Filter';
 
