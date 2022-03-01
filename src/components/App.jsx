@@ -1,60 +1,97 @@
-import Section from './Section/Section';
-import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
-import Statistics from './Statistics/Statistics';
-import Notification from './Notification/Notification';
 import React from 'react';
+import { nanoid } from 'nanoid';
+import Contacts from './Contacts/Contacts';
+import Filter from './Filter/Filter';
 
 export default class App extends React.Component {
   state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+    contacts: [
+      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
+    filter: '',
+    name: '',
+    number: '',
   };
 
-  onLeaveFeedback = tipeClick => {
-    this.setState(preState => ({ [tipeClick]: preState[tipeClick] + 1 }));
+  addName = e => {
+    const { name, value } = e.currentTarget;
+    this.setState({
+      [name]: value,
+    });
   };
 
-  countTotalFeedback = () => {
-    return Object.values(this.state).reduce((accum, number) => {
-      return accum + number;
-    }, 0);
+  submitBtn = e => {
+    e.preventDefault();
+
+    const myContacts = this.state.contacts;
+    const { name, number } = this.state;
+
+    myContacts.push(`${name}: ${number}`);
+    this.reset();
   };
 
-  countPositiveFeedbackPercentage = () => {
-    if (this.state.good === 0) {
-      return 0;
-    }
-    return Math.round((this.state.good * 100) / this.countTotalFeedback());
+  reset = () => {
+    this.setState({ name: '', number: '' });
   };
 
+  onSaveFind = e => {
+    this.setState({ filter: e.currentTarget.value.trim() });
+  };
+
+  findByName = () => {
+    const { filter, contacts } = this.state;
+
+    return contacts.filter(
+      elem =>
+        elem.name.slice(0, filter.length).toLowerCase() === filter.toLowerCase()
+    );
+  };
   render() {
-    const feedBackKeys = Object.keys(this.state);
+    const { contacts } = this.state;
 
     return (
       <div>
-        <Section title="Please leave feedback">
-          <FeedbackOptions
-            options={feedBackKeys}
-            onLeaveFeedback={this.onLeaveFeedback}
-          />
-        </Section>
-
-        <Section title="Section statistic">
-          {this.countTotalFeedback() ? (
-            <Statistics
-              good={this.state.good}
-              neutral={this.state.neutral}
-              bad={this.state.bad}
-              countTotalFeedback={this.countTotalFeedback}
-              countPositiveFeedbackPercentage={
-                this.countPositiveFeedbackPercentage
-              }
+        <h1>Phonebook</h1>
+        <form onSubmit={this.submitBtn}>
+          <label>
+            Name
+            <input
+              onChange={this.addName}
+              value={this.state.name}
+              type="text"
+              name="name"
+              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+              required
             />
-          ) : (
-            <Notification />
-          )}
-        </Section>
+          </label>{' '}
+          <label>
+            Number
+            <input
+              onChange={this.addName}
+              value={this.state.number}
+              type="tel"
+              name="number"
+              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+              required
+            />
+          </label>
+          <button type="submit">Add name</button>
+        </form>
+
+        <div>
+          <h2>Contacts</h2>
+          {/* <Filter
+            saveFind={this.onSaveFind}
+            filter={filter}
+            contacts={contacts}
+          /> */}
+          <Contacts contacts={contacts} />
+        </div>
       </div>
     );
   }
