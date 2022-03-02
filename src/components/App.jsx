@@ -2,6 +2,7 @@ import React from 'react';
 import ContactForma from './ContactForma/ContactForma';
 import ContactList from './ContactList/ContactList';
 import s from './App.module.css';
+import { nanoid } from 'nanoid';
 // import Filter from './Filter/Filter';
 
 export default class App extends React.Component {
@@ -17,9 +18,18 @@ export default class App extends React.Component {
   };
 
   submitBtn = data => {
-    this.setState(prevState => {
-      return prevState.contacts.push(data);
+    // this.chekContact(data.name);
+    let allName = [];
+    this.state.contacts.map(el => {
+      allName.push(el.name);
     });
+    if (allName.includes(data.name) === false) {
+      this.setState(prevState => {
+        return prevState.contacts.push({ ...data, id: nanoid() });
+      });
+    } else {
+      alert(`${data.name} is already in contacts`);
+    }
   };
 
   // chekContact = newName => {};
