@@ -11,6 +11,7 @@ export default class App extends React.Component {
       { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
       { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+      { id: 'id-5', name: 'dima', number: '227-915-26' },
     ],
     filter: '',
   };
@@ -20,6 +21,8 @@ export default class App extends React.Component {
       return prevState.contacts.push(data);
     });
   };
+
+  // chekContact = newName => {};
 
   onSaveFind = e => {
     this.setState({ filter: e.currentTarget.value.trim() });
@@ -42,7 +45,6 @@ export default class App extends React.Component {
 
   render() {
     const { contacts, filter } = this.state;
-    console.log(contacts);
     return (
       <div className={s.section}>
         <p className={s.title}>Phonebook</p>
