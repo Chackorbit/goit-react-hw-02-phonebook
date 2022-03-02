@@ -1,40 +1,24 @@
 import React from 'react';
-// import { nanoid } from 'nanoid';
-import Contacts from './Contacts/Contacts';
+import ContactForma from './ContactForma/ContactForma';
+import ContactList from './ContactList/ContactList';
+import s from './App.module.css';
 // import Filter from './Filter/Filter';
 
 export default class App extends React.Component {
   state = {
     contacts: [
-      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  addName = e => {
-    const { name, value } = e.currentTarget;
-    this.setState({
-      [name]: value,
+  submitBtn = data => {
+    this.setState(prevState => {
+      return prevState.contacts.push(data);
     });
-  };
-
-  submitBtn = e => {
-    e.preventDefault();
-
-    const myContacts = this.state.contacts;
-    const { name, number } = this.state;
-
-    myContacts.push(`${name}: ${number}`);
-    this.reset();
-  };
-
-  reset = () => {
-    this.setState({ name: '', number: '' });
   };
 
   onSaveFind = e => {
@@ -49,49 +33,28 @@ export default class App extends React.Component {
         elem.name.slice(0, filter.length).toLowerCase() === filter.toLowerCase()
     );
   };
+
+  deleteContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(el => el.id !== id),
+    }));
+  };
+
   render() {
-    const { contacts } = this.state;
-
+    const { contacts, filter } = this.state;
+    console.log(contacts);
     return (
-      <div>
-        <h1>Phonebook</h1>
-        <form onSubmit={this.submitBtn}>
-          <label>
-            Name
-            <input
-              onChange={this.addName}
-              value={this.state.name}
-              type="text"
-              name="name"
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-            />
-          </label>{' '}
-          <label>
-            Number
-            <input
-              onChange={this.addName}
-              value={this.state.number}
-              type="tel"
-              name="number"
-              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              required
-            />
-          </label>
-          <button type="submit">Add name</button>
-        </form>
+      <div className={s.section}>
+        <p className={s.title}>Phonebook</p>
+        <ContactForma contacts={contacts} submitBtn={this.submitBtn} />
 
-        <div>
-          <h2>Contacts</h2>
-          {/* <Filter
-            saveFind={this.onSaveFind}
-            filter={filter}
-            contacts={contacts}
-          /> */}
-          <Contacts contacts={contacts} />
-        </div>
+        <p className={s.title}>Contacts</p>
+        <ContactList
+          findByName={this.findByName}
+          filter={filter}
+          onSaveFind={this.onSaveFind}
+          deleteContact={this.deleteContact}
+        />
       </div>
     );
   }
