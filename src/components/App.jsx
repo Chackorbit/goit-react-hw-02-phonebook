@@ -3,6 +3,7 @@ import ContactForma from './ContactForma/ContactForma';
 import ContactList from './ContactList/ContactList';
 import s from './App.module.css';
 import { nanoid } from 'nanoid';
+import Filter from './Filter/Filter';
 // import Filter from './Filter/Filter';
 
 export default class App extends React.Component {
@@ -17,22 +18,32 @@ export default class App extends React.Component {
     filter: '',
   };
 
-  submitBtn = data => {
-    // this.chekContact(data.name);
-    let allName = [];
-    this.state.contacts.map(el => {
-      allName.push(el.name);
-    });
-    if (allName.includes(data.name) === false) {
-      this.setState(prevState => {
-        return prevState.contacts.push({ ...data, id: nanoid() });
-      });
-    } else {
-      alert(`${data.name} is already in contacts`);
-    }
-  };
+  submitBtn = ({ name, number }) => {
+    const normalizedName = name.toLowerCase();
 
-  // chekContact = newName => {};
+    const checkedForName = this.state.contacts.find(
+      contact => normalizedName === contact.name.toLocaleLowerCase()
+    );
+
+    if (checkedForName) {
+      return alert(`${name} is already in contacts`);
+    }
+
+    const newContact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    if (!name || !number) {
+      alert('Invalid name or number vaule!');
+      return;
+    }
+
+    this.setState(({ contacts }) => ({
+      contacts: [...contacts, newContact],
+    }));
+  };
 
   onSaveFind = e => {
     this.setState({ filter: e.currentTarget.value.trim() });
@@ -55,16 +66,17 @@ export default class App extends React.Component {
 
   render() {
     const { contacts, filter } = this.state;
+    console.log('Перерендер');
     return (
       <div className={s.section}>
         <p className={s.title}>Phonebook</p>
         <ContactForma contacts={contacts} submitBtn={this.submitBtn} />
 
         <p className={s.title}>Contacts</p>
+        <Filter filter={filter} onSaveFind={this.onSaveFind} />
         <ContactList
+          contacts={contacts}
           findByName={this.findByName}
-          filter={filter}
-          onSaveFind={this.onSaveFind}
           deleteContact={this.deleteContact}
         />
       </div>

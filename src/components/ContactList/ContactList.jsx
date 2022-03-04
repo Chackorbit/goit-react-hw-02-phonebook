@@ -8,19 +8,9 @@ export default class ContactList extends React.Component {
 
   render() {
     const fullList = this.props.findByName();
-    console.log(fullList.length);
+
     return (
       <div className={s.container}>
-        <label className={s.label}>Find by name</label>
-
-        <input
-          className={s.input}
-          type="text"
-          name="filter"
-          value={this.props.filter}
-          onChange={this.props.onSaveFind}
-        />
-
         <ul className={s.ul}>
           {fullList.length < 1 ? (
             <p>We dont have contacts</p>

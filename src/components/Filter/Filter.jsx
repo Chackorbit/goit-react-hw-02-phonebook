@@ -1,33 +1,28 @@
 import s from './Filter.module.css';
 import React from 'react';
+import { nanoid } from 'nanoid';
 
 export default class Filter extends React.Component {
   state = {};
 
+  idFilter = nanoid();
+
   render() {
     return (
       <div className={s.container}>
-        <label htmlFor="">
-          <input
-            type="text"
-            name="filter"
-            value={this.props.filter}
-            onChange={this.props.saveFind}
-          />
+        <label htmlFor={this.idFilter} className={s.label}>
+          Find by name
         </label>
 
-        <ul>
-          {this.props.contacts.map(el => (
-            <li key={el.id}>
-              {el.name}: {el.number}
-            </li>
-          ))}
-        </ul>
+        <input
+          className={s.input}
+          type="text"
+          name="filter"
+          value={this.props.filter}
+          onChange={this.props.onSaveFind}
+          id={this.idFilter}
+        />
       </div>
     );
   }
-
-  // FeedbackOptions.propTypes = {
-  //   options: propTypes.array,
-  // };
 }
